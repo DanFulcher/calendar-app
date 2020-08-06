@@ -1,0 +1,27 @@
+<template>
+  <button @click="onClick">
+    {{ text }}
+  </button>
+</template>
+
+<script>
+export default {
+  props: {
+    text: String,
+    onClick: Function,
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+button {
+  background: #11bcff;
+  padding: 20px 40px;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+}
+</style>

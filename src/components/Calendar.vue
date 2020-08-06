@@ -1,15 +1,21 @@
 <template>
   <div>
     <FullCalendar
-        class='calendar'
-        :options='calendarOptions'
-      >
-        <template v-slot:eventContent='arg'>
-          <b>{{ arg.timeText }}</b>
-          <i>{{ arg.event.title }}</i>
-        </template>
-      </FullCalendar>
-      <NewEvent v-if="modal.show" :title="modal.title" @close="modal.show = false" />
+      class='calendar'
+      :options='calendarOptions'
+    >
+      <template v-slot:eventContent='arg'>
+        <b>{{ arg.timeText }}</b>
+        <i>{{ arg.event.title }}</i>
+      </template>
+    </FullCalendar>
+    <NewEvent
+      v-if="modal.show"
+      :title="modal.title"
+      :info="modal.selctInfo"
+      @close="modal.show = false"
+      :selectInfo="this.modal.selectInfo"
+    />
   </div>
 </template>
 
@@ -19,7 +25,6 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import moment from 'moment';
-
 import NewEvent from './NewEvent.vue';
 
 export default {
@@ -28,6 +33,7 @@ export default {
       modal: {
         show: false,
         title: '',
+        selectInfo: {},
       },
 
       eventGuid: 0,
@@ -38,9 +44,8 @@ export default {
           interactionPlugin, // needed for dateClick
         ],
         headerToolbar: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay',
+          left: 'title',
+          right: 'prev,next today',
         },
         initialView: 'dayGridMonth',
         initialEvents: [],
@@ -79,23 +84,21 @@ export default {
     handleDateSelect(selectInfo) {
       this.modal.show = !this.modal.show;
       this.modal.title = moment(selectInfo.start).format('ddd Do MMMM YYYY');
-      console.log(this.showModal);
-      console.log(selectInfo);
-      // const title = prompt('Please enter a new title for your event');
-      // const calendarApi = selectInfo.view.calendar;
+      this.modal.selectInfo = selectInfo;
 
       // calendarApi.unselect(); // clear date selection
-
-      // if (title) {
-      //   calendarApi.addEvent({
-      //     id: this.createEventId(),
-      //     title,
-      //     start: selectInfo.startStr,
-      //     end: selectInfo.endStr,
-      //     allDay: selectInfo.allDay,
-      //   });
-      // }
     },
+
+    // addEvent(newEvent) {
+    //   const calendarApi = selectInfo.view.calendar;
+    //   calendarApi.addEvent({
+    //     id: this.createEventId(),
+    //     title,
+    //     start: selectInfo.startStr,
+    //     end: selectInfo.endStr,
+    //     allDay: selectInfo.allDay,
+    //   });
+    // },
 
     // handleEventClick(clickInfo) {
     //   if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {

@@ -3,20 +3,33 @@
     <div class="modal">
       <div class="close" @click="$emit('close')">Close</div>
       <div class="modal__header">
-        <h2>{{title}}</h2>
+        <h2>{{title }}</h2>
       </div>
       <div class="modal__body">
-        <Field label="Name" :val="newEvent.name" @valChanged="newEvent.name = $event" />
+        <Field
+          label="Name"
+          placeholder="Climbing at Yonder"
+          :val="this.$store.state.newEvent.name"
+          @valChanged="updateName($event)"
+          :showError="nameError"
+          errorMessage="Please name your event" />
         <FieldRow>
-          <Field
+          <Time
             label="Start Time"
-            :val="newEvent.startTime"
-            @valChanged="newEvent.startTime = $event" />
-          <Field
+            placeholder="9"
+            @hourChanged="updateStartHour($event)"
+            @minChanged="updateStartMin($event)"
+            @ampmChanged="updateStartAMPM($event)" />
+          <Time
             label="End Time"
-            :val="newEvent.endTime"
-            @valChanged="newEvent.endTime = $event" />
+            placeholder="11"
+            @hourChanged="updateEndHour($event)"
+            @minChanged="updateEndMin($event)"
+            @ampmChanged="updateEndAMPM($event)" />
         </FieldRow>
+        <div class="buttonCont">
+          <Button text="Add to calendar" :onClick="this.addToCal" />
+        </div>
       </div>
     </div>
   </div>
@@ -24,26 +37,57 @@
 
 <script>
 import Field from './Fields/Field.vue';
+import Time from './Fields/Time.vue';
 import FieldRow from './Fields/FieldRow.vue';
+import Button from './Button.vue';
 
 export default {
-  data() {
-    return {
-      newEvent: {
-        name: '',
-        startTime: '',
-        endTime: '',
-        allDay: true,
-      },
-
-    };
-  },
   props: {
     title: String,
+    info: Object,
+    selectInfo: Object,
+  },
+  data() {
+    return {
+      nameError: false,
+    };
   },
   components: {
     Field,
+    Time,
     FieldRow,
+    Button,
+  },
+  methods: {
+
+    updateName(name) {
+      this.$store.commit('setNewEventName', name);
+    },
+    updateStartHour(hour) {
+      this.$store.commit('setStartHour', hour);
+    },
+    updateStartMin(min) {
+      this.$store.commit('setStartMin', min);
+    },
+    updateStartAMPM(ampm) {
+      this.$store.commit('setStartAMPM', ampm);
+    },
+    updateEndHour(hour) {
+      this.$store.commit('setEndHour', hour);
+    },
+    updateEndMin(min) {
+      this.$store.commit('setEndMin', min);
+    },
+    updateEndAMPM(ampm) {
+      this.$store.commit('setEndAMPM', ampm);
+    },
+    addToCal() {
+      if (this.$store.state.newEvent.name) {
+        this.$store.commit('addEvent', this.selectInfo);
+        this.$emit('close');
+      }
+      this.nameError = true;
+    },
   },
 };
 </script>
@@ -74,6 +118,12 @@ export default {
     &__header {
       border-bottom: 1px solid #f1f1f1;
       margin-bottom: 20px;
+    }
+    &__body {
+      .buttonCont {
+        display: flex;
+        justify-content: flex-end;
+      }
     }
   }
 

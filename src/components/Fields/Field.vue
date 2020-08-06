@@ -2,15 +2,20 @@
   <div class="field">
     <label>{{label}}:</label>
     <input :placeholder="placeholder" :value="this.val" @input="onChange" />
+    <p v-if="this.showError" class="error">{{this.errorMessage}}</p>
   </div>
 </template>
 
 <script>
+
 export default {
   props: {
     label: String,
     placeholder: String,
     val: String,
+    valChanged: Function,
+    showError: Boolean,
+    errorMessage: String,
   },
   data() {
     return {
@@ -30,6 +35,7 @@ export default {
 .field {
   display: flex;
   flex-direction: column;
+  flex-basis: 100%;
   label {
     font-size: 21px;
   }
@@ -40,6 +46,11 @@ export default {
     outline: none;
     font-size: 18px;
     margin-bottom: 20px;
+  }
+  .error {
+    font-size: 12px;
+    color: #ff1111;
+    margin-top: -10px;
   }
 }
 </style>
