@@ -1,19 +1,19 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import generateID from '../helpers/generateID';
-import formatTime from '../helpers/formatTime';
+// import generateID from '../helpers/generateID';
+// import formatTime from '../helpers/formatTime';
 
 Vue.use(Vuex);
 const initNewEvent = {
   name: '',
   startTime: {
-    hour: '',
+    hour: '09',
     min: '00',
     ampm: 'am',
   },
   endTime: {
-    hour: '',
+    hour: '11',
     min: '00',
     ampm: 'am',
   },
@@ -44,28 +44,31 @@ export default new Vuex.Store({
     setEndAMPM(state, ampm) {
       state.newEvent.endTime.ampm = ampm;
     },
-    addEvent(state, selectInfo) {
+    addEvent(state) {
       if (state.newEvent.startTime.hour !== '') {
-        const startObj = state.newEvent.startTime;
-        const start = `${selectInfo.startStr}T${formatTime(startObj)}:${startObj.min}`;
+        // const startObj = state.newEvent.startTime;
+        // const start = `${selectInfo.startStr}T${formatTime(startObj)}:${startObj.min}`;
 
-        const endObj = state.newEvent.endTime;
-        const end = `${selectInfo.startStr}T${formatTime(endObj)}:${endObj.min}`;
+        // const endObj = state.newEvent.endTime;
+        // const end = `${selectInfo.startStr}T${formatTime(endObj)}:${endObj.min}`;
 
-        selectInfo.view.calendar.addEvent({
-          id: generateID(),
-          title: state.newEvent.name,
-          start,
-          end,
-          allDay: false,
-        });
-      } else {
-        selectInfo.view.calendar.addEvent({
-          id: generateID(),
-          title: state.newEvent.name,
-          allDay: true,
-        });
+        // selectInfo.view.calendar.addEvent({
+        //   id: generateID(),
+        //   title: state.newEvent.name,
+        //   start,
+        //   end,
+        //   allDay: false,
+        // });
+
+        console.log(this.state.newEvent.startTime);
       }
+      // else {
+      //   selectInfo.view.calendar.addEvent({
+      //     id: generateID(),
+      //     title: state.newEvent.name,
+      //     allDay: true,
+      //   });
+      // }
     },
   },
   actions: {

@@ -15,7 +15,7 @@ export default {
 
 <style lang="scss" scoped>
 button {
-  background: #11bcff;
+  background: #0e7b6f;
   padding: 20px 40px;
   border: none;
   outline: none;

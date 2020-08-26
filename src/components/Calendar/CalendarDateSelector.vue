@@ -1,10 +1,10 @@
 <template>
   <div class="calendar-date-selector">
-    <span @click="selectPrevious">﹤</span>
+    <span @click="selectPrevious" class="arrow">﹤</span>
     <span @click="selectCurrent" class="calendar-date-current">
       <h3>Today</h3>
     </span>
-    <span @click="selectNext">﹥</span>
+    <span @click="selectNext" class="arrow">﹥</span>
   </div>
 </template>
 
@@ -49,8 +49,23 @@ export default {
   .calendar-date-selector {
     display: flex;
     align-items: center;
-  }
-  .calendar-date-current {
-    margin: 0 15px;
+    .arrow {
+      padding: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      cursor: pointer;
+      &:hover {
+        background: #0e7b6f;
+        color: #fff;
+      }
+    }
+    .calendar-date-current {
+      margin: 0 15px;
+      cursor: pointer;
+    }
   }
 </style>

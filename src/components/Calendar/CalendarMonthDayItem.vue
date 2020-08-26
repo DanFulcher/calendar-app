@@ -5,6 +5,7 @@
       'calendar-day--not-current': !day.isCurrentMonth,
       'calendar-day--today': isToday
     }"
+    @click="$emit('select')"
   >
     <span>{{ label }}</span>
   </li>
@@ -42,11 +43,12 @@ export default {
 <style lang="scss" scoped>
   .calendar-day {
     position: relative;
-    min-height: 100px;
+    min-height: 120px;
     font-size: 16px;
     background-color: #fff;
-    color: rgb(184, 184, 184);
+    color: #4a4a4a;
     padding: 5px;
+    cursor: pointer;
   }
 
   .calendar-day > span {
@@ -54,14 +56,13 @@ export default {
     justify-content: center;
     align-items: center;
     position: absolute;
-    right: 2px;
-    width: var(--day-label-size);
-    height: var(--day-label-size);
+    right: 10px;
+    width: 35px;
+    height: 35px;
   }
 
   .calendar-day--not-current {
-    background-color: #eee;
-    color: var(--grey-300);
+    background-color: #fff8f0;
   }
 
   .calendar-day--today {
@@ -70,7 +71,7 @@ export default {
 
   .calendar-day--today > span {
     color: #fff;
-    border-radius: 9999px;
-    background-color: #eee;
+    border-radius: 50%;
+    background-color: #f27154;
   }
 </style>

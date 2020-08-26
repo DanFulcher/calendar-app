@@ -1,6 +1,6 @@
 <template>
   <div class="calendar-date-indicator">
-    <h1>{{ selectedMonth }}</h1>
+    <h2>{{ selectedMonth }}</h2>
   </div>
 </template>
 

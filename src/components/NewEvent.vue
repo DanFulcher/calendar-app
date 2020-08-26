@@ -16,7 +16,7 @@
         <FieldRow>
           <Time
             label="Start Time"
-            placeholder="9"
+            placeholder="09"
             @hourChanged="updateStartHour($event)"
             @minChanged="updateStartMin($event)"
             @ampmChanged="updateStartAMPM($event)" />

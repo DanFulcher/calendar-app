@@ -1,15 +1,12 @@
 <template>
   <div>
     <div class="calendar-month">
-
-      <!-- The calendar header -->
       <div class="calendar-month-header">
-        <!-- Month name -->
         <CalendarDateIndicator
           :selected-date="selectedDate"
           class="calendar-month-header-selected-month"
         />
-        <!-- Pagination -->
+        <h1>Yonder Booking Sync</h1>
         <CalendarDateSelector
           :current-date="today"
           :selected-date="selectedDate"
@@ -17,16 +14,15 @@
         />
       </div>
 
-      <!-- Calendar grid header -->
       <CalendarWeekdays />
 
-      <!-- Calendar grid -->
       <ol class="days-grid">
         <CalendarMonthDayItem
           v-for="day in days"
           :key="day.date"
           :day="day"
           :is-today="day.date === today"
+          @select="handleDateClick(day)"
         />
       </ol>
     </div>
@@ -45,6 +41,7 @@
 import dayjs from 'dayjs';
 import weekday from 'dayjs/plugin/weekday';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
 import NewEvent from '../NewEvent.vue';
 import CalendarDateIndicator from './CalendarDateIndicator.vue';
 import CalendarDateSelector from './CalendarDateSelector.vue';
@@ -53,6 +50,7 @@ import CalendarMonthDayItem from './CalendarMonthDayItem.vue';
 
 dayjs.extend(weekday);
 dayjs.extend(weekOfYear);
+dayjs.extend(advancedFormat);
 
 export default {
   data() {
@@ -81,6 +79,10 @@ export default {
     },
     selectDate(newSelectedDate) {
       this.selectedDate = newSelectedDate;
+    },
+    handleDateClick(day) {
+      this.modal.title = dayjs(day.date).format('Do of MMMM YYYY');
+      this.modal.show = true;
     },
   },
   computed: {
@@ -169,39 +171,46 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background: #fff;
+    padding: 0 20px;
   }
   .calendar-month {
     position: relative;
-    background-color: var(--grey-200);
-    border: solid 1px var(--grey-300);
+    border: solid 1px #ddd;
   }
 
   .day-of-week {
     color: var(--grey-800);
     font-size: 18px;
     background-color: #fff;
-    padding-bottom: 5px;
-    padding-top: 10px;
   }
 
-  .day-of-week,
+  .day-of-week {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    list-style: none;
+    padding-left: 0;
+    background: #fff;
+  }
+
   .days-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     list-style: none;
     padding-left: 0;
+    background: #eee;
   }
 
   .day-of-week > * {
-    text-align: right;
+    text-align: center;
     padding-right: 5px;
   }
 
   .days-grid {
     height: 100%;
     position: relative;
-    grid-column-gap: var(--grid-gap);
-    grid-row-gap: var(--grid-gap);
-    border-top: solid 1px var(--grey-200);
+    grid-column-gap: 1px;
+    grid-row-gap: 1px;
+    border-top: solid 1px #eee;
   }
 </style>
