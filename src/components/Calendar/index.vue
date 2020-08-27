@@ -29,15 +29,13 @@
     <NewEvent
       v-if="modal.show"
       :title="modal.title"
-      :info="modal.selctInfo"
+      :date="modal.date"
       @close="modal.show = false"
-      :selectInfo="this.modal.selectInfo"
     />
   </div>
 </template>
 
 <script>
-// import moment from 'moment';
 import dayjs from 'dayjs';
 import weekday from 'dayjs/plugin/weekday';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
@@ -59,7 +57,7 @@ export default {
       modal: {
         show: false,
         title: '',
-        selectInfo: {},
+        date: '',
       },
     };
   },
@@ -83,6 +81,7 @@ export default {
     handleDateClick(day) {
       this.modal.title = dayjs(day.date).format('Do of MMMM YYYY');
       this.modal.show = true;
+      this.modal.date = day.date;
     },
   },
   computed: {
@@ -109,10 +108,34 @@ export default {
       return dayjs(this.selectedDate).daysInMonth();
     },
     currentMonthDays() {
-      return [...Array(this.numberOfDaysInMonth)].map((day, index) => ({
-        date: dayjs(`${this.year}-${this.month}-${index + 1}`).format('YYYY-MM-DD'),
-        isCurrentMonth: true,
-      }));
+      return [...Array(this.numberOfDaysInMonth)].map((day, index) => {
+        const formatDay = dayjs(`${this.year}-${this.month}-${index + 1}`).format('YYYY-MM-DD');
+        const allEvents = this.$store.state.events;
+        const dayEvents = [];
+        allEvents.map((event) => {
+          if (event.date === formatDay) {
+            dayEvents.push(event);
+            return true;
+          }
+          return false;
+        });
+        const compare = (a, b) => {
+          if (a.startTime < b.startTime) {
+            return -1;
+          }
+          if (a.startTime > b.startTime) {
+            return 1;
+          }
+          return 0;
+        };
+
+        dayEvents.sort(compare);
+        return ({
+          date: formatDay,
+          isCurrentMonth: true,
+          events: dayEvents,
+        });
+      });
     },
     previousMonthDays() {
       const firstDayOfTheMonthWeekday = this.getWeekday(
@@ -129,7 +152,6 @@ export default {
         .subtract(firstDayOfTheMonthWeekday - 1, 'day')
         .date();
 
-      // Cover first day of the month being sunday (firstDayOfTheMonthWeekday === 0)
       const visibleNumberOfDaysFromPreviousMonth = firstDayOfTheMonthWeekday
         ? firstDayOfTheMonthWeekday - 1
         : 6;

@@ -28,10 +28,6 @@
         <option value="30">30</option>
         <option value="45">45</option>
       </select>
-      <select :value="this.ampm" @input="ampmChanged" >
-        <option value="am">AM</option>
-        <option value="pm">PM</option>
-      </select>
     </div>
   </div>
 </template>
@@ -60,10 +56,6 @@ export default {
       this.minute = e.target.value;
       this.$emit('minChanged', this.minute);
     },
-    ampmChanged(e) {
-      this.ampm = e.target.value;
-      this.$emit('ampmChanged', this.ampm);
-    },
   },
 };
 </script>
@@ -77,17 +69,8 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    input {
-      width: 40%;
-      border: none;
-      border-bottom: 1px solid #f1f1f1;
-      padding: 10px 0;
-      outline: none;
-      font-size: 18px;
-      margin-bottom: 20px;
-    }
     select {
-      width: 20%;
+      width: 40%;
       appearance: none;
       border:none;
       outline: none;

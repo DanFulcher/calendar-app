@@ -7,11 +7,21 @@
     }"
     @click="$emit('select')"
   >
-    <span>{{ label }}</span>
+    <div class="calendar-day__header">
+      <span>{{ label }}</span>
+    </div>
+    <div class="calendar-day__body">
+      <Event
+        v-for="event in day.events"
+        :event="event"
+        :key="event.id"
+      />
+    </div>
   </li>
 </template>
 <script>
 import dayjs from 'dayjs';
+import Event from './Event.vue';
 
 export default {
   name: 'CalendarMonthDayItem',
@@ -32,7 +42,9 @@ export default {
       default: false,
     },
   },
-
+  components: {
+    Event,
+  },
   computed: {
     label() {
       return dayjs(this.day.date).format('D');
@@ -49,16 +61,17 @@ export default {
     color: #4a4a4a;
     padding: 5px;
     cursor: pointer;
-  }
-
-  .calendar-day > span {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    right: 10px;
-    width: 35px;
-    height: 35px;
+    &__header {
+      display: flex;
+      justify-content: flex-end;
+      span {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 35px;
+        height: 35px;
+      }
+    }
   }
 
   .calendar-day--not-current {
@@ -69,9 +82,10 @@ export default {
     padding-top: 4px;
   }
 
-  .calendar-day--today > span {
+  .calendar-day--today > .calendar-day__header > span {
     color: #fff;
     border-radius: 50%;
     background-color: #f27154;
+    margin-bottom: 10px;
   }
 </style>

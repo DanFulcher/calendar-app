@@ -3,7 +3,7 @@
     <div class="modal">
       <div class="close" @click="$emit('close')">Close</div>
       <div class="modal__header">
-        <h2>{{title }}</h2>
+        <h2>{{ title }}</h2>
       </div>
       <div class="modal__body">
         <Field
@@ -18,14 +18,12 @@
             label="Start Time"
             placeholder="09"
             @hourChanged="updateStartHour($event)"
-            @minChanged="updateStartMin($event)"
-            @ampmChanged="updateStartAMPM($event)" />
+            @minChanged="updateStartMin($event)" />
           <Time
             label="End Time"
             placeholder="11"
             @hourChanged="updateEndHour($event)"
-            @minChanged="updateEndMin($event)"
-            @ampmChanged="updateEndAMPM($event)" />
+            @minChanged="updateEndMin($event)" />
         </FieldRow>
         <div class="buttonCont">
           <Button text="Add to calendar" :onClick="this.addToCal" />
@@ -44,8 +42,7 @@ import Button from './Button.vue';
 export default {
   props: {
     title: String,
-    info: Object,
-    selectInfo: Object,
+    date: String,
   },
   data() {
     return {
@@ -59,7 +56,6 @@ export default {
     Button,
   },
   methods: {
-
     updateName(name) {
       this.$store.commit('setNewEventName', name);
     },
@@ -69,21 +65,15 @@ export default {
     updateStartMin(min) {
       this.$store.commit('setStartMin', min);
     },
-    updateStartAMPM(ampm) {
-      this.$store.commit('setStartAMPM', ampm);
-    },
     updateEndHour(hour) {
       this.$store.commit('setEndHour', hour);
     },
     updateEndMin(min) {
       this.$store.commit('setEndMin', min);
     },
-    updateEndAMPM(ampm) {
-      this.$store.commit('setEndAMPM', ampm);
-    },
     addToCal() {
       if (this.$store.state.newEvent.name) {
-        this.$store.commit('addEvent', this.selectInfo);
+        this.$store.commit('addEvent', this.date);
         this.$emit('close');
       }
       this.nameError = true;
