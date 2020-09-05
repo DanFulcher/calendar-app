@@ -63,6 +63,8 @@ export default new Vuex.Store({
     },
     setStartHour(state, hour) {
       state.newEvent.startTime.hour = hour;
+      const updatedEndTime = parseFloat(hour) + 2;
+      state.newEvent.endTime.hour = updatedEndTime.toString();
     },
     setStartMin(state, min) {
       state.newEvent.startTime.min = min;

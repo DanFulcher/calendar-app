@@ -57,6 +57,11 @@ export default {
       this.$emit('minChanged', this.minute);
     },
   },
+  watch: {
+    placeholder(newVal) {
+      this.hour = newVal;
+    },
+  },
 };
 </script>
 

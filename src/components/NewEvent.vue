@@ -9,19 +9,19 @@
         <Field
           label="Name"
           placeholder="Climbing at Yonder"
-          :val="this.$store.state.newEvent.name"
+          :val="name"
           @valChanged="updateName($event)"
           :showError="nameError"
           errorMessage="Please name your event" />
         <FieldRow>
           <Time
             label="Start Time"
-            placeholder="09"
+            :placeholder="startHour"
             @hourChanged="updateStartHour($event)"
             @minChanged="updateStartMin($event)" />
           <Time
             label="End Time"
-            placeholder="11"
+            :placeholder="endHour"
             @hourChanged="updateEndHour($event)"
             @minChanged="updateEndMin($event)" />
         </FieldRow>
@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import Field from './Fields/Field.vue';
 import Time from './Fields/Time.vue';
 import FieldRow from './Fields/FieldRow.vue';
@@ -72,13 +73,18 @@ export default {
       this.$store.commit('setEndMin', min);
     },
     addToCal() {
-      if (this.$store.state.newEvent.name) {
+      if (this.name) {
         this.$store.commit('addEvent', this.date);
         this.$emit('close');
       }
       this.nameError = true;
     },
   },
+  computed: mapState({
+    name: (state) => state.newEvent.name,
+    startHour: (state) => state.newEvent.startTime.hour,
+    endHour: (state) => state.newEvent.endTime.hour,
+  }),
 };
 </script>
 
