@@ -38,7 +38,6 @@ export default {
   props: {
     label: String,
     placeholder: String,
-    val: Object,
   },
   data() {
     return {

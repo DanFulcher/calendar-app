@@ -1,5 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import axios from 'axios';
+
+import { auth } from 'firebase';
 
 import generateID from '../helpers/generateID';
 
@@ -17,6 +20,7 @@ const initNewEvent = {
 };
 export default new Vuex.Store({
   state: {
+    isLoggedIn: false,
     newEvent: initNewEvent,
     events: [
       {
@@ -58,6 +62,18 @@ export default new Vuex.Store({
     ],
   },
   mutations: {
+    isUserLoggedIn(state) {
+      if (auth.currentUser) {
+        state.isLoggedIn = true;
+        console.log('user is logged in');
+      } else {
+        state.isLoggedIn = false;
+        console.log('user is not logged in');
+      }
+    },
+    logUserIn(state) {
+      state.isLoggedIn = !state.isLoggedIn;
+    },
     setNewEventName(state, name) {
       state.newEvent.name = name;
     },
@@ -83,7 +99,14 @@ export default new Vuex.Store({
         startTime: `${state.newEvent.startTime.hour}:${state.newEvent.startTime.min}`,
         endTime: `${state.newEvent.endTime.hour}:${state.newEvent.endTime.min}`,
       };
-
+      axios.post('https://yonder-booking-sync.firebaseio.com/events', {
+        newEvent,
+      }).then((response) => {
+        console.log(response);
+      })
+        .catch((error) => {
+          console.log(error);
+        });
       state.events.push(newEvent);
     },
   },
