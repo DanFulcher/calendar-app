@@ -20,6 +20,7 @@ const initNewEvent = {
 };
 export default new Vuex.Store({
   state: {
+    sideBarType: 'login',
     isLoggedIn: false,
     newEvent: initNewEvent,
     events: [
@@ -62,18 +63,6 @@ export default new Vuex.Store({
     ],
   },
   mutations: {
-    isUserLoggedIn(state) {
-      if (auth.currentUser) {
-        state.isLoggedIn = true;
-        console.log('user is logged in');
-      } else {
-        state.isLoggedIn = false;
-        console.log('user is not logged in');
-      }
-    },
-    logUserIn(state) {
-      state.isLoggedIn = !state.isLoggedIn;
-    },
     setNewEventName(state, name) {
       state.newEvent.name = name;
     },
@@ -109,8 +98,31 @@ export default new Vuex.Store({
         });
       state.events.push(newEvent);
     },
+    setSideBar(state, type) {
+      state.sideBarType = type;
+    },
   },
   actions: {
+    isUserLoggedIn(state) {
+      if (auth.currentUser) {
+        state.isLoggedIn = true;
+        console.log('user is logged in');
+      } else {
+        state.isLoggedIn = false;
+        console.log('user is not logged in');
+      }
+    },
+    createAccount({ state }, data) {
+      console.log(data.name);
+      console.log(data.email);
+      console.log(data.password);
+      state.isLoggedIn = true;
+    },
+    logUserIn({ state }, data) {
+      console.log(data.email);
+      console.log(data.password);
+      state.isLoggedIn = !state.isLoggedIn;
+    },
   },
   modules: {
   },

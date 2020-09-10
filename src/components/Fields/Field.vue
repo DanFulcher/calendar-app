@@ -1,7 +1,7 @@
 <template>
   <div class="field">
     <label>{{label}}:</label>
-    <input :placeholder="placeholder" :value="this.val" @input="onChange" />
+    <input :placeholder="placeholder" :value="this.val" @input="onChange" :type="type" />
     <p v-if="this.showError" class="error">{{this.errorMessage}}</p>
   </div>
 </template>
@@ -16,6 +16,7 @@ export default {
     valChanged: Function,
     showError: Boolean,
     errorMessage: String,
+    type: String,
   },
   data() {
     return {
@@ -36,21 +37,24 @@ export default {
   display: flex;
   flex-direction: column;
   flex-basis: 100%;
+  text-align: left;
   label {
     font-size: 21px;
+    white-space: nowrap;
   }
   input {
     border: none;
     border-bottom: 1px solid #f1f1f1;
     padding: 10px 0;
     outline: none;
-    font-size: 18px;
+    font-size: 16px;
     margin-bottom: 20px;
   }
   .error {
     font-size: 12px;
     color: #ff1111;
     margin-top: -10px;
+    white-space: nowrap;
   }
 }
 </style>
