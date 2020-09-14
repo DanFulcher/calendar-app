@@ -1,18 +1,22 @@
 <template>
   <div class="home">
+    <SideBar :open="sidebarOpen" @close="toggleSideBar">
+      <div v-if="!isLoggedIn">
+        <LoginForm v-if="sideBarType === 'login'" />
+        <CreateAccount v-if="sideBarType === 'createAccount'" />
+      </div>
+      <div v-else>
+        <SideBarContent :user="user">
+        </SideBarContent>
+      </div>
+    </SideBar>
     <div class="menuToggleContainer">
-      <SideBar :open="sidebarOpen" @close="toggleSideBar">
-        <LoginForm v-if="!isLoggedIn && sideBarType === 'login'" />
-        <CreateAccount v-if="!isLoggedIn && sideBarType === 'createAccount'" />
-        <h1 v-if="isLoggedIn">Logged In Stuff</h1>
-      </SideBar>
       <div class="toggleButton" @click="toggleSideBar">
         <v-icon name="bars" scale="2" />
       </div>
     </div>
     <div class="calContainer">
       <Calendar />
-      {{sideBarType}}
     </div>
   </div>
 </template>
@@ -24,6 +28,7 @@ import SideBar from '@/components/SideBar.vue';
 import Icon from 'vue-awesome/components/Icon.vue';
 import LoginForm from '@/components/LoginForm.vue';
 import CreateAccount from '@/components/CreateAccount.vue';
+import SideBarContent from '@/components/SideBarContent.vue';
 import 'vue-awesome/icons/bars';
 
 export default {
@@ -35,7 +40,7 @@ export default {
     };
   },
   created() {
-    this.$store.dispatch('isUserLoggedIn');
+    this.$store.commit('isUserLoggedIn');
   },
   methods: {
     login() {
@@ -47,6 +52,7 @@ export default {
   },
   computed: mapState({
     isLoggedIn: (state) => state.isLoggedIn,
+    user: (state) => state.user,
     sideBarType: (state) => state.sideBarType,
   }),
   components: {
@@ -55,6 +61,7 @@ export default {
     'v-icon': Icon,
     LoginForm,
     CreateAccount,
+    SideBarContent,
   },
 };
 </script>

@@ -5,21 +5,18 @@
       placeholder="John Smith"
       :val="name"
       @valChanged="handleName($event)"
-      :showError="nameError"
-      errorMessage="Please enter your name" />
+      :showError="nameError !== ''" />
     <Field
       label="Email Address"
       placeholder="example@example.com"
       :val="email"
       @valChanged="handleUser($event)"
-      :showError="userError"
-      errorMessage="Please enter a valid username" />
+      :showError="userError !== ''" />
     <Field
       label="Password"
       :val="password"
       @valChanged="handlePassword($event)"
-      :showError="passwordError"
-      errorMessage="Please enter your password"
+      :showError="passwordError !== ''"
       type="password" />
     <Button text="Create Account" :onClick="this.createAccount" />
 
@@ -30,16 +27,17 @@
 <script>
 import Field from '@/components/Fields/Field.vue';
 import Button from '@/components/Button.vue';
+import * as fb from '../firebase';
 
 export default {
   data() {
     return {
       name: '',
-      nameError: false,
+      nameError: '',
       email: '',
-      userError: false,
+      userError: '',
       password: '',
-      passwordError: false,
+      passwordError: '',
     };
   },
   components: {
@@ -57,12 +55,31 @@ export default {
       this.password = value;
     },
     createAccount() {
-      if (this.email && this.password) {
-        this.$store.dispatch('createAccount', {
-          name: this.name,
-          email: this.email,
-          password: this.password,
-        });
+      if (this.name && this.email && this.password) {
+        fb.auth.createUserWithEmailAndPassword(this.email, this.password)
+          .then(
+            () => {
+              const user = fb.auth.currentUser;
+              user.updateProfile({
+                displayName: this.name,
+              }).then(
+                this.$store.dispatch('logUserIn', {
+                  name: this.name,
+                  email: this.email,
+                }),
+              ).catch(
+                (err) => console.log(err),
+              );
+            },
+          ).catch(
+            (err) => {
+              if (err.code === 'auth/email-already-in-use') {
+                this.userError = 'Too late! This email address is already in use!';
+              } if (err.code === 'auth/weak-password') {
+                this.passwordError = 'This password is as weak as Taylors climbs.';
+              }
+            },
+          );
       } if (!this.name) {
         this.nameError = true;
       } if (!this.email) {

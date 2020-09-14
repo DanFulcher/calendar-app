@@ -25,8 +25,8 @@ export default {
     transition: width .8s, padding .8s;
     overflow: hidden;
     &.open {
-      width: 230px;
-      padding: 40px 20px;
+      width: 350px;
+      padding: 40px 0 40px 15px;
     }
     &__header {
       display: flex;

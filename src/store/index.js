@@ -1,8 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
-
-import { auth } from 'firebase';
+import * as fb from '../firebase';
 
 import generateID from '../helpers/generateID';
 
@@ -22,6 +21,7 @@ export default new Vuex.Store({
   state: {
     sideBarType: 'login',
     isLoggedIn: false,
+    user: {},
     newEvent: initNewEvent,
     events: [
       {
@@ -101,27 +101,31 @@ export default new Vuex.Store({
     setSideBar(state, type) {
       state.sideBarType = type;
     },
-  },
-  actions: {
     isUserLoggedIn(state) {
-      if (auth.currentUser) {
+      if (fb.auth.currentUser) {
+        const user = fb.auth.currentUser;
         state.isLoggedIn = true;
-        console.log('user is logged in');
+        state.user = {
+          name: user.displayName,
+          email: user.email,
+        };
       } else {
         state.isLoggedIn = false;
         console.log('user is not logged in');
       }
     },
-    createAccount({ state }, data) {
-      console.log(data.name);
-      console.log(data.email);
-      console.log(data.password);
-      state.isLoggedIn = true;
+    logUserOut(state) {
+      state.isLoggedIn = false;
+      state.user = {};
     },
+  },
+  actions: {
     logUserIn({ state }, data) {
-      console.log(data.email);
-      console.log(data.password);
-      state.isLoggedIn = !state.isLoggedIn;
+      state.isLoggedIn = true;
+      state.user = {
+        name: data.name,
+        email: data.email,
+      };
     },
   },
   modules: {
