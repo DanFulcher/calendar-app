@@ -16,7 +16,10 @@ export default {
     valChanged: Function,
     showError: Boolean,
     errorMessage: String,
-    type: String,
+    type: {
+      type: String,
+      default: 'text',
+    },
   },
   data() {
     return {

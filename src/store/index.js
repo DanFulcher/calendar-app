@@ -90,12 +90,13 @@ export default new Vuex.Store({
       };
       axios.post('https://yonder-booking-sync.firebaseio.com/events', {
         newEvent,
-      }).then((response) => {
-        console.log(response);
-      })
-        .catch((error) => {
-          console.log(error);
-        });
+      });
+      // .then((response) => {
+      //   console.log(response);
+      // })
+      // .catch((error) => {
+      //   console.log(error);
+      // });
       state.events.push(newEvent);
     },
     setSideBar(state, type) {
@@ -111,7 +112,6 @@ export default new Vuex.Store({
         };
       } else {
         state.isLoggedIn = false;
-        console.log('user is not logged in');
       }
     },
     logUserOut(state) {

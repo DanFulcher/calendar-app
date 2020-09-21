@@ -68,7 +68,7 @@ export default {
                   email: this.email,
                 }),
               ).catch(
-                (err) => console.log(err),
+                (err) => this.nameError === err.code,
               );
             },
           ).catch(

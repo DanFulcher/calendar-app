@@ -23,8 +23,6 @@ export default {
     logout() {
       fb.auth.signOut().then(() => {
         this.$store.commit('logUserOut');
-      }).catch((error) => {
-        console.log(error);
       });
     },
   },
