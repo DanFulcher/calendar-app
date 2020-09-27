@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <SideBar :open="sidebarOpen" @close="toggleSideBar">
+    <SideBar>
       <div v-if="!isLoggedIn">
         <LoginForm v-if="sideBarType === 'login'" />
         <CreateAccount v-if="sideBarType === 'createAccount'" />
@@ -20,29 +20,21 @@
 import { mapState } from 'vuex';
 import Calendar from '@/components/Calendar/index.vue';
 import SideBar from '@/components/SideBar.vue';
-// import Icon from 'vue-awesome/components/Icon.vue';
+
 import LoginForm from '@/components/LoginForm.vue';
 import CreateAccount from '@/components/CreateAccount.vue';
 import SideBarContent from '@/components/SideBarContent.vue';
-import 'vue-awesome/icons/bars';
 
 export default {
   name: 'Home',
-  data() {
-    return {
-      // sidebarOpen: false,
-    };
-  },
   created() {
     this.$store.commit('isUserLoggedIn');
+    this.$store.commit('getEvents');
   },
   methods: {
     login() {
       this.$store.commit('logUserIn');
     },
-    // toggleSideBar() {
-    //   this.sidebarOpen = !this.sidebarOpen;
-    // },
   },
   computed: mapState({
     isLoggedIn: (state) => state.isLoggedIn,
@@ -52,7 +44,6 @@ export default {
   components: {
     Calendar,
     SideBar,
-    // 'v-icon': Icon,
     LoginForm,
     CreateAccount,
     SideBarContent,

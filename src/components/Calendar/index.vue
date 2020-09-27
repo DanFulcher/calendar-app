@@ -22,13 +22,13 @@
           :key="day.date"
           :day="day"
           :is-today="day.date === today"
-          @select="handleDateClick(day)"
+          @select="handleDateClick(day.date)"
         />
       </ol>
+      <AddButton @onClick="handleDateClick(today)" />
     </div>
     <NewEvent
       v-if="modal.show"
-      :title="modal.title"
       :date="modal.date"
       @close="modal.show = false"
     />
@@ -45,6 +45,7 @@ import CalendarDateIndicator from './CalendarDateIndicator.vue';
 import CalendarDateSelector from './CalendarDateSelector.vue';
 import CalendarWeekdays from './CalendarWeekdays.vue';
 import CalendarMonthDayItem from './CalendarMonthDayItem.vue';
+import AddButton from './AddButton.vue';
 
 dayjs.extend(weekday);
 dayjs.extend(weekOfYear);
@@ -56,7 +57,6 @@ export default {
       selectedDate: dayjs(),
       modal: {
         show: false,
-        title: '',
         date: '',
       },
     };
@@ -67,6 +67,7 @@ export default {
     CalendarWeekdays,
     CalendarMonthDayItem,
     NewEvent,
+    AddButton,
   },
   selectDate(newSelectedDate) {
     this.selectedDate = newSelectedDate;
@@ -79,9 +80,9 @@ export default {
       this.selectedDate = newSelectedDate;
     },
     handleDateClick(day) {
-      this.modal.title = dayjs(day.date).format('Do of MMMM YYYY');
+      this.$store.commit('setNewEventDate', day);
       this.modal.show = true;
-      this.modal.date = day.date;
+      this.modal.date = day;
     },
   },
   computed: {

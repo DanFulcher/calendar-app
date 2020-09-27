@@ -1,7 +1,11 @@
 <template>
   <div class="field">
     <label>{{label}}:</label>
-    <input :placeholder="placeholder" :value="this.val" @input="onChange" :type="type" />
+    <input
+      :placeholder="placeholder"
+      :value="this.val"
+      @input="onChange"
+      :type="type" />
     <p v-if="this.showError" class="error">{{this.errorMessage}}</p>
   </div>
 </template>
@@ -11,7 +15,10 @@
 export default {
   props: {
     label: String,
-    placeholder: String,
+    placeholder: {
+      type: String,
+      required: false,
+    },
     val: String,
     valChanged: Function,
     showError: Boolean,
@@ -50,8 +57,9 @@ export default {
     border-bottom: 1px solid #f1f1f1;
     padding: 10px 0;
     outline: none;
-    font-size: 16px;
+    font-size: 18px;
     margin-bottom: 20px;
+    font-family: inherit;
   }
   .error {
     font-size: 12px;

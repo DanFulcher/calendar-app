@@ -12,8 +12,18 @@ export default {
   props: {
     text: String,
     onClick: Function,
-    loading: Boolean,
-    disabled: Boolean,
+    loading: {
+      type: Boolean,
+      default() {
+        return false;
+      },
+    },
+    disabled: {
+      type: Boolean,
+      default() {
+        return false;
+      },
+    },
   },
   components: {
     Loading,

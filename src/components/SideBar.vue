@@ -13,6 +13,7 @@
 
 <script>
 import Icon from 'vue-awesome/components/Icon.vue';
+import 'vue-awesome/icons/bars';
 
 export default {
   components: {
@@ -41,7 +42,7 @@ export default {
     height: 100%;
     background: #fff;
     box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.25);
-    transition: left .8s;
+    transition: left .5s;
     overflow: hidden;
     display: flex;
     &.open {

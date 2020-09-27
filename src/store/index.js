@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import axios from 'axios';
 import * as fb from '../firebase';
 
 import generateID from '../helpers/generateID';
@@ -8,6 +7,7 @@ import generateID from '../helpers/generateID';
 Vue.use(Vuex);
 const initNewEvent = {
   name: '',
+  date: '',
   startTime: {
     hour: '09',
     min: '00',
@@ -23,48 +23,15 @@ export default new Vuex.Store({
     isLoggedIn: false,
     user: {},
     newEvent: initNewEvent,
-    events: [
-      {
-        name: 'Today event',
-        date: '2020-08-27',
-        startTime: '09:00',
-        endTime: '11:00',
-      },
-      {
-        name: 'Dan Event',
-        date: '2020-08-27',
-        startTime: '10:00',
-        endTime: '11:00',
-      },
-      {
-        name: 'Today event 2',
-        date: '2020-08-27',
-        startTime: '08:00',
-        endTime: '11:00',
-      },
-      {
-        name: 'Test Event',
-        date: '2020-08-08',
-        startTime: '10:00',
-        endTime: '12:00',
-      },
-      {
-        name: 'Dan Test',
-        date: '2020-08-15',
-        startTime: '13:00',
-        endTime: '15:00',
-      },
-      {
-        name: 'Test Test',
-        date: '2020-08-30',
-        startTime: '13:00',
-        endTime: '15:00',
-      },
-    ],
+    events: [],
+    formError: '',
   },
   mutations: {
     setNewEventName(state, name) {
       state.newEvent.name = name;
+    },
+    setNewEventDate(state, date) {
+      state.newEvent.date = date;
     },
     setStartHour(state, hour) {
       state.newEvent.startTime.hour = hour;
@@ -80,24 +47,23 @@ export default new Vuex.Store({
     setEndMin(state, min) {
       state.newEvent.endTime.min = min;
     },
-    addEvent(state, date) {
+    addEvent(state) {
       const newEvent = {
         name: state.newEvent.name,
         id: generateID(),
-        date,
+        date: state.newEvent.date,
         startTime: `${state.newEvent.startTime.hour}:${state.newEvent.startTime.min}`,
         endTime: `${state.newEvent.endTime.hour}:${state.newEvent.endTime.min}`,
       };
-      axios.post('https://yonder-booking-sync.firebaseio.com/events', {
+      fb.eventsCollection.doc(newEvent.id).set({
         newEvent,
-      });
-      // .then((response) => {
-      //   console.log(response);
-      // })
-      // .catch((error) => {
-      //   console.log(error);
-      // });
-      state.events.push(newEvent);
+      })
+        .then(() => {
+          state.newEvent = initNewEvent;
+        })
+        .catch((error) => {
+          state.formError = error;
+        });
     },
     setSideBar(state, type) {
       state.sideBarType = type;
@@ -117,6 +83,11 @@ export default new Vuex.Store({
     logUserOut(state) {
       state.isLoggedIn = false;
       state.user = {};
+    },
+    async getEvents(state) {
+      state.events = [];
+      const snapshot = await fb.eventsCollection.get();
+      snapshot.docs.map((doc) => state.events.push(doc.data().newEvent));
     },
   },
   actions: {

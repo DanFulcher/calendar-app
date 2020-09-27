@@ -3,16 +3,23 @@
     <div class="modal">
       <div class="close" @click="$emit('close')">Close</div>
       <div class="modal__header">
-        <h2>{{ title }}</h2>
+        <h2>New Event</h2>
       </div>
       <div class="modal__body">
         <Field
           label="Name"
-          placeholder="Climbing at Yonder"
+          placeholder="eg. John Smith Climbing"
           :val="name"
           @valChanged="updateName($event)"
           :showError="nameError"
           errorMessage="Please name your event" />
+        <Field
+          label="Date"
+          :val="date"
+          @valChanged="updateDate($event)"
+          :showError="dateError"
+          errorMessage="Please select a date"
+          type="date" />
         <FieldRow>
           <Time
             label="Start Time"
@@ -25,6 +32,9 @@
             @hourChanged="updateEndHour($event)"
             @minChanged="updateEndMin($event)" />
         </FieldRow>
+        <p v-if="this.$store.state.formError !== ''" class="error">
+          {{ this.$store.state.formError }}
+        </p>
         <div class="buttonCont">
           <Button text="Add to calendar" :onClick="this.addToCal" />
         </div>
@@ -42,12 +52,12 @@ import Button from './Button.vue';
 
 export default {
   props: {
-    title: String,
     date: String,
   },
   data() {
     return {
       nameError: false,
+      dateError: false,
     };
   },
   components: {
@@ -58,7 +68,12 @@ export default {
   },
   methods: {
     updateName(name) {
+      this.nameError = false;
       this.$store.commit('setNewEventName', name);
+    },
+    updateDate(newDate) {
+      this.dateError = false;
+      this.$store.commit('setNewEventDate', newDate);
     },
     updateStartHour(hour) {
       this.$store.commit('setStartHour', hour);
@@ -73,11 +88,17 @@ export default {
       this.$store.commit('setEndMin', min);
     },
     addToCal() {
-      if (this.name) {
-        this.$store.commit('addEvent', this.date);
+      if (this.name && this.date) {
+        this.$store.commit('addEvent');
+        this.$store.commit('getEvents');
         this.$emit('close');
       }
-      this.nameError = true;
+      if (!this.name) {
+        this.nameError = true;
+      }
+      if (!this.date) {
+        this.dateError = true;
+      }
     },
   },
   computed: mapState({
