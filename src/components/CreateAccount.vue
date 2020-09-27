@@ -18,7 +18,12 @@
       @valChanged="handlePassword($event)"
       :showError="passwordError !== ''"
       type="password" />
-    <Button text="Create Account" :onClick="this.createAccount" />
+    <Button
+      text="Create Account"
+      :onClick="this.createAccount"
+      :loading="loading"
+      :disabled="loading"
+    />
 
     <p class="link" @click="handleLogin">Or click here to log in</p>
   </div>
@@ -38,6 +43,7 @@ export default {
       userError: '',
       password: '',
       passwordError: '',
+      loading: false,
     };
   },
   components: {
@@ -56,6 +62,7 @@ export default {
     },
     createAccount() {
       if (this.name && this.email && this.password) {
+        this.loading = true;
         fb.auth.createUserWithEmailAndPassword(this.email, this.password)
           .then(
             () => {
@@ -70,6 +77,7 @@ export default {
               ).catch(
                 (err) => this.nameError === err.code,
               );
+              this.loading = false;
             },
           ).catch(
             (err) => {
@@ -78,6 +86,7 @@ export default {
               } if (err.code === 'auth/weak-password') {
                 this.passwordError = 'This password is as weak as Taylors climbs.';
               }
+              this.loading = false;
             },
           );
       } if (!this.name) {

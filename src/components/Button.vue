@@ -1,14 +1,22 @@
 <template>
-  <button @click="onClick">
-    {{ text }}
+  <button @click="onClick" :disabled="disabled">
+    <span v-if="!loading">{{ text }}</span>
+    <Loading v-else />
   </button>
 </template>
 
 <script>
+import Loading from './Loading.vue';
+
 export default {
   props: {
     text: String,
     onClick: Function,
+    loading: Boolean,
+    disabled: Boolean,
+  },
+  components: {
+    Loading,
   },
 };
 </script>

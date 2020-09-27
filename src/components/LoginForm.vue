@@ -14,7 +14,12 @@
       :showError="passwordError !== ''"
       :errorMessage="passwordError"
       type="password" />
-    <Button text="Log in" :onClick="this.login" />
+    <Button
+      text="Log in"
+      :onClick="this.login"
+      :loading="loading"
+      :disabled="loading"
+    />
 
     <p class="link" @click="handleCreate">New here? Create an account</p>
   </div>
@@ -32,6 +37,7 @@ export default {
       userError: '',
       password: '',
       passwordError: '',
+      loading: false,
     };
   },
   components: {
@@ -49,6 +55,7 @@ export default {
     },
     login() {
       if (this.email && this.password) {
+        this.loading = true;
         fb.auth.signInWithEmailAndPassword(this.email, this.password)
           .then(
             () => {
@@ -57,6 +64,7 @@ export default {
                 name,
                 email: this.email,
               });
+              this.loading = false;
             },
           ).catch(
             (err) => {
@@ -67,6 +75,7 @@ export default {
               } if (err.code === 'auth/wrong-password') {
                 this.passwordError = 'Wrong password, you idiot!';
               }
+              this.loading = false;
             },
           );
       } if (!this.email) {

@@ -1,16 +1,31 @@
 <template>
   <div class="sidebar" :class="open && 'open'">
-    <slot />
+    <div class="sidebar__content">
+      <slot />
+    </div>
+    <div class="menuToggleContainer">
+      <div class="toggleButton" @click="toggleSideBar">
+        <v-icon name="bars" scale="2" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import Icon from 'vue-awesome/components/Icon.vue';
+
 export default {
-  props: {
-    open: {
-      type: Boolean,
-      required: true,
-      default: false,
+  components: {
+    'v-icon': Icon,
+  },
+  data() {
+    return {
+      open: false,
+    };
+  },
+  methods: {
+    toggleSideBar() {
+      this.open = !this.open;
     },
   },
 };
@@ -18,19 +33,27 @@ export default {
 
 <style lang="scss" scoped>
   .sidebar {
-    width: 0;
+    position:absolute;
+    top: 0;
+    left: -332px;
+    z-index: 1;
+    width: 400px;
     height: 100%;
-    padding: 40px 0;
     background: #fff;
-    transition: width .8s, padding .8s;
+    box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.25);
+    transition: left .8s;
     overflow: hidden;
+    display: flex;
     &.open {
-      width: 350px;
-      padding: 40px 0 40px 15px;
+      left:0;
     }
-    &__header {
-      display: flex;
-      &__button {
+    &__content {
+      padding-left: 15px;
+      text-align: left;
+    }
+    .menuToggleContainer {
+      padding: 15px 20px;
+      .toggleButton {
         cursor: pointer;
       }
     }
