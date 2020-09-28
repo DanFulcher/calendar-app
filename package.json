@@ -65,6 +65,14 @@
         "env": {
           "jest": true
         }
+      },
+      {
+        "files": [
+          "**/components/*"
+        ],
+        "rules": {
+          "max-len": "off"
+        }
       }
     ]
   },

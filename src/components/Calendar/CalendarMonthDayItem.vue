@@ -12,7 +12,7 @@
     </div>
     <div class="calendar-day__body">
       <Event
-        v-for="event in day.events"
+        v-for="event in events"
         :event="event"
         :key="event.id"
       />
@@ -46,6 +46,22 @@ export default {
     Event,
   },
   computed: {
+    events() {
+      const filtered = this.$store.state.justMyClimbs;
+      const filteredEvents = [];
+      if (this.day.events) {
+        this.day.events.map((event) => {
+          if (filtered && event.created_by === this.$store.state.user.id) {
+            filteredEvents.push(event);
+          } if (!filtered) {
+            filteredEvents.push(event);
+          }
+          return true;
+        });
+      }
+
+      return filteredEvents;
+    },
     label() {
       return dayjs(this.day.date).format('D');
     },

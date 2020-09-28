@@ -25,6 +25,7 @@ export default new Vuex.Store({
     newEvent: initNewEvent,
     events: [],
     formError: '',
+    justMyClimbs: false,
   },
   mutations: {
     setNewEventName(state, name) {
@@ -54,6 +55,7 @@ export default new Vuex.Store({
         date: state.newEvent.date,
         startTime: `${state.newEvent.startTime.hour}:${state.newEvent.startTime.min}`,
         endTime: `${state.newEvent.endTime.hour}:${state.newEvent.endTime.min}`,
+        created_by: fb.auth.currentUser.uid,
       };
       fb.eventsCollection.doc(newEvent.id).set({
         newEvent,
@@ -75,6 +77,7 @@ export default new Vuex.Store({
         state.user = {
           name: user.displayName,
           email: user.email,
+          id: user.uid,
         };
       } else {
         state.isLoggedIn = false;

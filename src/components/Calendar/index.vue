@@ -158,13 +158,26 @@ export default {
         : 6;
 
       return [...Array(visibleNumberOfDaysFromPreviousMonth)].map(
-        (day, index) => ({
-          date: dayjs(
+        (day, index) => {
+          const formatDay = dayjs(
             `${previousMonth.year()}-${previousMonth.month()
                 + 1}-${previousMonthLastMondayDayOfMonth + index}`,
-          ).format('YYYY-MM-DD'),
-          isCurrentMonth: false,
-        }),
+          ).format('YYYY-MM-DD');
+          const allEvents = this.$store.state.events;
+          const dayEvents = [];
+          allEvents.map((event) => {
+            if (event.date === formatDay) {
+              dayEvents.push(event);
+              return true;
+            }
+            return false;
+          });
+          return ({
+            date: formatDay,
+            isCurrentMonth: false,
+            events: dayEvents,
+          });
+        },
       );
     },
     nextMonthDays() {
@@ -178,12 +191,23 @@ export default {
         ? 7 - lastDayOfTheMonthWeekday
         : lastDayOfTheMonthWeekday;
 
-      return [...Array(visibleNumberOfDaysFromNextMonth)].map((day, index) => ({
-        date: dayjs(
-          `${nextMonth.year()}-${nextMonth.month() + 1}-${index + 1}`,
-        ).format('YYYY-MM-DD'),
-        isCurrentMonth: false,
-      }));
+      return [...Array(visibleNumberOfDaysFromNextMonth)].map((day, index) => {
+        const formatDay = dayjs(`${nextMonth.year()}-${nextMonth.month() + 1}-${index + 1}`).format('YYYY-MM-DD');
+        const allEvents = this.$store.state.events;
+        const dayEvents = [];
+        allEvents.map((event) => {
+          if (event.date === formatDay) {
+            dayEvents.push(event);
+            return true;
+          }
+          return false;
+        });
+        return ({
+          date: formatDay,
+          isCurrentMonth: false,
+          events: dayEvents,
+        });
+      });
     },
   },
 };
