@@ -49,7 +49,7 @@ export default {
       bottom:100%;
       left: 0;
       z-index: 2;
-      width: 100%;
+      width: 115%;
       padding: 10px;
       background: #fff;
       box-shadow: 0px 0px 3px 1px rgba(0,0,0,0.25);

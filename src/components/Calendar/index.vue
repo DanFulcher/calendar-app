@@ -22,16 +22,27 @@
           :key="day.date"
           :day="day"
           :is-today="day.date === today"
-          @select="handleDateClick(day.date)"
+          @select="handleDateClick(day)"
         />
       </ol>
-      <AddButton @onClick="handleDateClick(today)" />
+      <AddButton @onClick="handleNewEvent(today)" />
     </div>
-    <NewEvent
+    <Modal
       v-if="modal.show"
-      :date="modal.date"
       @close="modal.show = false"
-    />
+      :title="modal.title"
+    >
+      <EventList
+        v-if="modal.type === 'events'"
+        :events="modal.events"
+        @addEvent="handleNewEvent(modal.date)"
+      />
+      <NewEvent
+        v-if="modal.type === 'newEvent'"
+        :date="modal.date"
+        @close="modal.show = false"
+      />
+    </Modal>
   </div>
 </template>
 
@@ -40,7 +51,9 @@ import dayjs from 'dayjs';
 import weekday from 'dayjs/plugin/weekday';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
-import NewEvent from '../NewEvent.vue';
+import Modal from '../Modals/Modal.vue';
+import NewEvent from '../Modals/NewEvent.vue';
+import EventList from '../Modals/EventList.vue';
 import CalendarDateIndicator from './CalendarDateIndicator.vue';
 import CalendarDateSelector from './CalendarDateSelector.vue';
 import CalendarWeekdays from './CalendarWeekdays.vue';
@@ -57,7 +70,6 @@ export default {
       selectedDate: dayjs(),
       modal: {
         show: false,
-        date: '',
       },
     };
   },
@@ -66,7 +78,9 @@ export default {
     CalendarDateSelector,
     CalendarWeekdays,
     CalendarMonthDayItem,
+    Modal,
     NewEvent,
+    EventList,
     AddButton,
   },
   selectDate(newSelectedDate) {
@@ -79,10 +93,23 @@ export default {
     selectDate(newSelectedDate) {
       this.selectedDate = newSelectedDate;
     },
-    handleDateClick(day) {
+    handleNewEvent(day) {
       this.$store.commit('setNewEventDate', day);
-      this.modal.show = true;
-      this.modal.date = day;
+      this.modal = {
+        show: true,
+        date: day,
+        type: 'newEvent',
+        title: 'New Event',
+      };
+    },
+    handleDateClick(day) {
+      this.modal = {
+        show: true,
+        date: day.date,
+        type: 'events',
+        title: 'Events',
+        events: day.events,
+      };
     },
   },
   computed: {
