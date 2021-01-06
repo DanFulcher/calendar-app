@@ -13,7 +13,7 @@
     "@fullcalendar/interaction": "^5.2.0",
     "@fullcalendar/timegrid": "^5.2.0",
     "@fullcalendar/vue": "^5.2.0",
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "dayjs": "^1.8.34",
     "firebase": "^7.19.1",
